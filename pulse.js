@@ -119,6 +119,8 @@ function onTrackChanged(newTrack) {
   const interval = Math.round(1000 / bps); // Interval in milliseconds
   const progress = newTrack.Progress;
 
+  // TODO: Take Spotify round-trip latency into account...
+
   // Find out how much time has passed since the last beat
   const timeSinceLastBeat = progress % interval;
 
@@ -135,10 +137,6 @@ function onTrackChanged(newTrack) {
   }, timeUntilNextBeat);
 
   updateDisplayText(newTrack);
-
-  // beatIntervalId = setInterval(function() {
-  //   onBeat();
-  // }, interval);
 }
 
 async function refreshTrack() {
@@ -165,5 +163,5 @@ function deepEqual(obj1, obj2) {
 }
 
 function updateDisplayText(track) {
-  document.getElementById("current-track-label").innerText = `${track.Artist} - ${track.Name}`;
+  document.getElementById("current-track-label").innerText = `${track.Artist} - ${track.Name} 【=◈︿◈=】`;
 }

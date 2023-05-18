@@ -1,4 +1,9 @@
 <style>
+    @font-face {
+      font-family: CaskaydiaCoveNF;
+      src: url("assets/Caskaydia Cove Nerd Font Complete Windows Compatible Regular.otf");
+    }
+    
     * {
         margin: 0;
         padding: 0;
@@ -6,11 +11,25 @@
     }
 
     p {
-      position: absolute;
       color: #EF6246;
+      font-family: CaskaydiaCoveNF;
+      font-variant-ligatures: additional-ligatures;
+      text-transform: uppercase; /* just cause... */
+      font-size: 36px;
+    }
+
+    #current-track-label {
+      position: absolute;
       margin-top: 1.5vh;
       margin-left: 1.5vw;
-      font-family: sans-serif;
+    }
+
+    #stream-status-message {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-right: 1.5vw;
+      margin-bottom: 1.5vh;
     }
 </style>
 <html>
@@ -22,7 +41,8 @@
   </head>
   <body>
     <main>
-      <p id="current-track-label">dummy</p>
+      <p id="current-track-label" ==> init. 【=◈︿◈=】</p>
+      <p id="stream-status-message">já vorto ===</p>
     </main>
   </body>
 </html>
