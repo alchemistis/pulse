@@ -64,8 +64,6 @@ function draw() {
   rotateZ(frameCount * 0.01);
   ngon(sides, 0, 0, 80);
 
-  // if (random() % 2 == 0) camera(0, 0, (height / 2) / tan(PI / 6) / 2, 0, 0, 0, 0, 1, 0);
-
   for (let posIndex = 0; posIndex < posCycles.length; posIndex++) {
     drawComTruise(colorCycles[colorIndex], posCycles[colorIndex]);
   }
@@ -119,18 +117,38 @@ function onTrackChanged(newTrack) {
   const bpm = Math.round(newTrack.Bpm);
   const bps = bpm / 60;
   const interval = Math.round(1000 / bps); // Interval in milliseconds
+  const progress = newTrack.Progress;
+
+  // Find out how much time has passed since the last beat
+  const timeSinceLastBeat = progress % interval;
+
+  // Calculate the time until the next beat
+  const timeUntilNextBeat = interval - timeSinceLastBeat;
 
   clearInterval(beatIntervalId);
-  beatIntervalId = setInterval(function() {
+
+  setTimeout(function() {
     onBeat();
-  }, interval);
+    beatIntervalId = setInterval(function() {
+      onBeat();
+    }, interval);
+  }, timeUntilNextBeat);
+
+  updateDisplayText(newTrack);
+
+  // beatIntervalId = setInterval(function() {
+  //   onBeat();
+  // }, interval);
 }
 
 async function refreshTrack() {
   console.log("Fetching track data from aura-api...");
 
   let track = await auraClient.getCurrentlyPlayingTrack();
-  if (!deepEqual(currentTrack, track)) {
+
+  let hasProgressReset = currentTrack && currentTrack.Progress > track.Progress;
+
+  if (!deepEqual(currentTrack, track) || hasProgressReset) {
     onTrackChanged(track);
   }
 
@@ -139,8 +157,13 @@ async function refreshTrack() {
   bpm = Math.round(currentTrack.Bpm);
   console.log(`SONG: ${currentTrack.Artist} - ${currentTrack.Name}`);
   console.log(`BPM: ${Math.round(currentTrack.Bpm)}`);
+  console.log(`PROGRESS (ms): ${currentTrack.Progress}`);
 }
 
 function deepEqual(obj1, obj2) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+function updateDisplayText(track) {
+  document.getElementById("current-track-label").innerText = `${track.Artist} - ${track.Name}`;
 }
